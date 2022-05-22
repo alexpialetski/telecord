@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "module": "es2015",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "target": "es5",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+
+    /* Emit */
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "build",
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"],
+  "ts-node": {
+    "esm": true
+  }
+}
