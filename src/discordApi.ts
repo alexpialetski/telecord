@@ -24,7 +24,6 @@ export const searchMessages = ({
   offset,
   guildId = VEEFRIENDS_GUILD,
   authorId = GARY_VEE_ID,
-  channel_id = GENERAL_CHANNEL_ID,
 }: SearchMessagesParams = {}): Promise<APIMessage[]> =>
   axiosInstance
     .get<SearchMessages>(
@@ -33,7 +32,6 @@ export const searchMessages = ({
         params: {
           author_id: authorId,
           offset,
-          channel_id,
         },
       }
     )

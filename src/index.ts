@@ -8,7 +8,7 @@ import {
 } from "./discordService.js";
 import { ask } from "./readline.js";
 import { getMessageById } from "./discordApi.js";
-import { GENERAL_CHANNEL_ID } from "./constant.js";
+import { parseLink } from "./utils.js";
 
 const rlInterface = readline.createInterface({
   input: process.stdin,
@@ -17,13 +17,13 @@ const rlInterface = readline.createInterface({
 
 ask("What is the link?\n", rlInterface)
   .then((link) => {
-    const startMessageId = link.split("/").reverse()[0];
+    const { channelId, messageId } = parseLink(link);
 
-    if (!startMessageId) {
+    if (!messageId || !channelId) {
       throw new Error("Link is broken");
     }
 
-    return getMessageById(GENERAL_CHANNEL_ID, startMessageId);
+    return getMessageById(channelId, messageId);
   })
   .then((message) => {
     if (!message) {
