@@ -7,7 +7,7 @@ import {
 } from "./telegramApi.js";
 import { VEEFRIENDS_GUILD } from "./constant.js";
 import { APIAttachment, APIMessage } from "./types.js";
-import { buildDiscordMessage, waitFor } from "./utils.js";
+import { buildDiscordMessage, buildLink, waitFor } from "./utils.js";
 
 export const sendDiscordAttachment = (attachment: APIAttachment) => {
   if (attachment.content_type === "image/jpeg") {
@@ -26,9 +26,22 @@ export const sendDiscordMessage = (message: APIMessage, replyTo?: number) =>
     parse_mode: "HTML",
   })
     .then((telegramMessage) =>
-      Promise.all(message.attachments.map(sendDiscordAttachment)).then(
-        () => telegramMessage
-      )
+      Promise.all(
+        message.attachments.map((attachment) =>
+          sendDiscordAttachment(attachment).catch(() =>
+            sendTextMessage(
+              `Couldn't send: ${buildLink(
+                attachment.url,
+                attachment.filename
+              )}`,
+              undefined,
+              {
+                parse_mode: "HTML",
+              }
+            )
+          )
+        )
+      ).then(() => telegramMessage)
     )
     .then(waitFor(5000));
 
@@ -59,7 +72,10 @@ export const sendMessageQueue = (messages: APIMessage[]): Promise<unknown> =>
       const lastMessage = messages.pop();
 
       return sendTextMessage(
-        `🟥🟥🟥🟥🟥🟥<a href="https://discord.com/channels/${VEEFRIENDS_GUILD}/${lastMessage?.channel_id}/${lastMessage?.id}">Last message</a>🟥🟥🟥🟥🟥🟥🟥`,
+        `🟥🟥🟥🟥🟥🟥${buildLink(
+          `https://discord.com/channels/${VEEFRIENDS_GUILD}/${lastMessage?.channel_id}/${lastMessage?.id}`,
+          "Last message"
+        )}🟥🟥🟥🟥🟥🟥🟥`,
         undefined,
         { parse_mode: "HTML" }
       );
