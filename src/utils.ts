@@ -27,8 +27,9 @@ export const parseDiscordContent = (content: string): string => {
   const channelMentions = content.replace(/<#(\d+)>/g, (_, channelId: string) =>
     getChannelName(channelId)
   );
+  const peopleMentions = channelMentions.replace(/<@(\d+)>/g, "@$1");
 
-  return channelMentions;
+  return peopleMentions;
 };
 
 export const buildDiscordMessage = (message: APIMessage): string =>
@@ -36,6 +37,7 @@ export const buildDiscordMessage = (message: APIMessage): string =>
     message.channel_id
   )}</b>\n` + parseDiscordContent(message.content);
 
-console.log(
-  parseDiscordContent("Pls @everyone check <#836679406092550184> ♥️♥️")
-);
+export const waitFor =
+  <T>(timeout: number) =>
+  (prevValue: T) =>
+    new Promise<T>((res, _) => setTimeout(() => res(prevValue), timeout));

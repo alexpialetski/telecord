@@ -7,7 +7,7 @@ import {
 } from "./telegramApi.js";
 import { VEEFRIENDS_GUILD } from "./constant.js";
 import { APIAttachment, APIMessage } from "./types.js";
-import { buildDiscordMessage } from "./utils.js";
+import { buildDiscordMessage, waitFor } from "./utils.js";
 
 export const sendDiscordAttachment = (attachment: APIAttachment) => {
   if (attachment.content_type === "image/jpeg") {
@@ -24,11 +24,13 @@ export const sendDiscordAttachment = (attachment: APIAttachment) => {
 export const sendDiscordMessage = (message: APIMessage, replyTo?: number) =>
   sendTextMessage(buildDiscordMessage(message), replyTo, {
     parse_mode: "HTML",
-  }).then((telegramMessage) =>
-    Promise.all(message.attachments.map(sendDiscordAttachment)).then(
-      () => telegramMessage
+  })
+    .then((telegramMessage) =>
+      Promise.all(message.attachments.map(sendDiscordAttachment)).then(
+        () => telegramMessage
+      )
     )
-  );
+    .then(waitFor(5000));
 
 export const sendMessageThread = (
   message: APIMessage
