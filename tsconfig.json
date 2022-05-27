@@ -3,10 +3,10 @@
     /* Language and Environment */
     "module": "es2015",
     "moduleResolution": "node",
-    "sourceMap": true,
     "target": "es5",
     "rootDir": "./src",
     "baseUrl": "./src",
+    "allowSyntheticDefaultImports": true,
 
     /* Emit */
     "declaration": true,
