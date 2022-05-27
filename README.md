@@ -6,3 +6,4 @@
 | TELEGRAM_AUTH_TOKEN | Telegram VF_Snatcher bot token                                                                       |
 | NODE_ENV            | Development                                                                                          |
 | PORT                | 3000                                                                                                 |
+| HEROKU_URL          | https://telecordvee.herokuapp.com/                                                                   |
