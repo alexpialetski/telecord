@@ -3,7 +3,7 @@ import { ExtraReplyMessage } from "telegraf/typings/telegram-types";
 
 import { TELEGRAM_CHANNEL_ID } from "./constant.js";
 
-const TelegramBot = new Telegraf(process.env.TELEGRAM_AUTH_TOKEN || "");
+export const TelegramBot = new Telegraf(process.env.TELEGRAM_AUTH_TOKEN || "");
 
 export const sendTextMessage = (
   message: string,
