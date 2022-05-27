@@ -5,10 +5,10 @@
   "description": "",
   "main": "./src/index.ts",
   "scripts": {
-    "start": "ts-node ./src/bot.ts",
+    "start": "node ./build/envvar.js",
+    "start-bot": "ts-node ./src/bot.ts",
     "cli": "ts-node ./src/cli.ts",
-    "build": "tsc",
-    "envvar": "ts-node ./src/asd.ts"
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
