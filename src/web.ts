@@ -6,11 +6,10 @@ const app = express();
 app.use(bodyParser.json());
 
 app.get("/", function (_, res) {
-  console.log("test");
   res.json({ message: "Hey" });
 });
 
-const server = app.listen(80, "0.0.0.0", () => {
+const server = app.listen(Number(process.env.PORT), "0.0.0.0", () => {
   console.log(`Web server started: ${JSON.stringify(server.address())}`);
 });
 
