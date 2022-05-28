@@ -7,3 +7,4 @@
 | NODE_ENV            | Development                                                                                          |
 | PORT                | 3000                                                                                                 |
 | HEROKU_URL          | https://telecordvee.herokuapp.com/                                                                   |
+| AUTHOR_PASSWORD     | Password for routes with authorization                                                               |

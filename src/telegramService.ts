@@ -57,7 +57,10 @@ export const sendMessageThread = (
   );
 };
 
-export const sendMessageQueue = (messages: APIMessage[]): Promise<string> =>
+export const sendMessageQueue = (
+  messages: APIMessage[],
+  startMessageLink: string
+) =>
   messages
     .reduce<Promise<unknown>>(
       (acc, message) =>
@@ -70,14 +73,16 @@ export const sendMessageQueue = (messages: APIMessage[]): Promise<string> =>
     )
     .then(() => {
       const lastMessage = messages.pop();
-      const lastMessageLink = buildLink(
-        `https://discord.com/channels/${VEEFRIENDS_GUILD}/${lastMessage?.channel_id}/${lastMessage?.id}`,
-        "Last message"
-      );
+
+      const lastMessageLink = lastMessage
+        ? `https://discord.com/channels/${VEEFRIENDS_GUILD}/${lastMessage?.channel_id}/${lastMessage?.id}`
+        : startMessageLink;
+
+      const htmlLink = buildLink(lastMessageLink, "Last message");
 
       return sendTextMessage(
-        `🟥🟥🟥🟥🟥🟥${lastMessageLink}🟥🟥🟥🟥🟥🟥🟥`,
+        `🟥🟥🟥🟥🟥🟥${htmlLink}🟥🟥🟥🟥🟥🟥🟥`,
         undefined,
         { parse_mode: "HTML" }
-      ).then(() => lastMessageLink);
+      ).then(() => ({ lastMessageLink, htmlLink }));
     });

@@ -9,3 +9,5 @@ export const ANNOUNCEMENTS_CNANNEL_ID = "836679406092550184";
 export const TELEGRAM_CHANNEL_ID = "-1001615192095";
 
 export const AUTHOR_TELEGRAM_USER_ID = 5137209719;
+
+export const FILE_NAME = "lastlink.txt";

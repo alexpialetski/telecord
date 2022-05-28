@@ -5,6 +5,7 @@ import {
 } from "./discordService.js";
 import { getMessageById } from "./discordApi.js";
 import { parseLink } from "./utils.js";
+import { APIMessage } from "types.js";
 
 export const searchByLink = (link: string) => {
   const { channelId, messageId } = parseLink(link);
@@ -23,5 +24,5 @@ export const searchByLink = (link: string) => {
     })
     .then((res) => res.reverse())
     .then((res) => Promise.all(res.map(getMessagesWithReferences)))
-    .then(sendMessageQueue);
+    .then((messages: APIMessage[]) => sendMessageQueue(messages, link));
 };
