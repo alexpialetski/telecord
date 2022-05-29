@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import basicAuth from "express-basic-auth";
 
 import { searchByLink } from "./main.js";
-import { readfileHandler } from "./web.utils.js";
+import { errorHandler } from "./web.utils.js";
 import { FILE_NAME } from "./constant.js";
 
 const app = express();
@@ -17,7 +17,7 @@ app.get("/", (_, res) =>
     .then((link) => {
       return res.status(200).json({ message: link });
     })
-    .catch(readfileHandler(res))
+    .catch(errorHandler(res))
 );
 
 app.post(
@@ -37,7 +37,7 @@ app.post(
           .then(() => htmlLink)
       )
       .then((link) => res.status(200).json(link))
-      .catch(readfileHandler(res))
+      .catch(errorHandler(res))
 );
 
 const server = app.listen(Number(process.env.PORT), "0.0.0.0", () => {
