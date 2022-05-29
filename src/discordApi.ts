@@ -1,11 +1,8 @@
 import axios from "axios";
 
 import { APIMessage, SearchMessages } from "./types.js";
-import {
-  GARY_VEE_ID,
-  GENERAL_CHANNEL_ID,
-  VEEFRIENDS_GUILD,
-} from "./constant.js";
+import { GARY_VEE_ID, VEEFRIENDS_GUILD } from "./constant.js";
+import { waitFor } from "./utils.js";
 
 const axiosInstance = axios.create({
   headers: {
@@ -35,7 +32,8 @@ export const searchMessages = ({
         },
       }
     )
-    .then((res) => res.data.messages.map((wrapper) => wrapper[0]));
+    .then((res) => res.data.messages.map((wrapper) => wrapper[0]))
+    .then(waitFor(200));
 
 export const getMessageById = (
   channelId?: string,
@@ -46,4 +44,5 @@ export const getMessageById = (
       `https://discord.com/api/v9/channels/${channelId}/messages`,
       { params: { limit: 1, around: messageId } }
     )
-    .then((res) => res.data[0]);
+    .then((res) => res.data[0])
+    .then(waitFor(200));
