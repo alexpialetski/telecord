@@ -1,11 +1,39 @@
-import { sendMessageQueue } from "./telegramService.js";
 import {
   searchMessagesAfterTimestamp,
   getMessagesWithReferences,
 } from "./discordService.js";
 import { getMessageById } from "./discordApi.js";
-import { parseLink } from "./utils.js";
-import { APIMessage } from "types.js";
+import { buildLink, parseLink } from "./utils.js";
+import { APIMessage } from "./types.js";
+import { sendTextMessage } from "./telegramApi.js";
+import { sendDiscordMessageThread } from "./telegramService.js";
+import { VEEFRIENDS_GUILD } from "./constant.js";
+
+const sendMessageQueue = (messages: APIMessage[], startMessageLink: string) =>
+  messages
+    .reduce<Promise<unknown>>(
+      (acc, message) =>
+        acc
+          .then(() =>
+            sendTextMessage("🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩")
+          )
+          .then(() => getMessagesWithReferences(message))
+          .then(sendDiscordMessageThread),
+      Promise.resolve()
+    )
+    .then(() => {
+      const lastMessage = messages.pop();
+
+      const lastMessageLink = lastMessage
+        ? `https://discord.com/channels/${VEEFRIENDS_GUILD}/${lastMessage?.channel_id}/${lastMessage?.id}`
+        : startMessageLink;
+
+      const htmlLink = buildLink(lastMessageLink, "Last message");
+
+      return sendTextMessage(`🟥🟥🟥🟥🟥🟥${htmlLink}🟥🟥🟥🟥🟥🟥🟥`).then(
+        () => ({ lastMessageLink, htmlLink })
+      );
+    });
 
 export const searchByLink = (link: string) => {
   const { channelId, messageId } = parseLink(link);
@@ -23,6 +51,5 @@ export const searchByLink = (link: string) => {
       return searchMessagesAfterTimestamp(+new Date(message.timestamp));
     })
     .then((res) => res.reverse())
-    .then((res) => Promise.all(res.map(getMessagesWithReferences)))
     .then((messages: APIMessage[]) => sendMessageQueue(messages, link));
 };

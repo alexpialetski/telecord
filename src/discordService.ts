@@ -31,11 +31,16 @@ export const searchMessagesAfterTimestamp = (
 
 export const getMessageReference = (
   message: APIMessage
-): Promise<APIMessage | null | undefined> =>
-  getMessageById(
-    message.message_reference?.channel_id,
-    message.message_reference?.message_id
+): Promise<APIMessage | null | undefined> => {
+  if (!message.message_reference) {
+    return Promise.resolve(undefined);
+  }
+
+  return getMessageById(
+    message.message_reference.channel_id,
+    message.message_reference.message_id
   );
+};
 
 export const getMessagesWithReferences = (
   message: APIMessage

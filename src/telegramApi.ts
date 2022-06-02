@@ -12,6 +12,7 @@ export const sendTextMessage = (
 ) =>
   TelegramBot.telegram.sendMessage(TELEGRAM_CHANNEL_ID, message, {
     reply_to_message_id: replyToMessageId,
+    parse_mode: "HTML",
     ...options,
   });
 

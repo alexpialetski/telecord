@@ -5,7 +5,6 @@ import {
   sendTextMessage,
   sendVideoMessage,
 } from "./telegramApi.js";
-import { VEEFRIENDS_GUILD } from "./constant.js";
 import { APIAttachment, APIMessage } from "./types.js";
 import { buildDiscordMessage, buildLink, waitFor } from "./utils.js";
 
@@ -22,22 +21,13 @@ export const sendDiscordAttachment = (attachment: APIAttachment) => {
 };
 
 export const sendDiscordMessage = (message: APIMessage, replyTo?: number) =>
-  sendTextMessage(buildDiscordMessage(message), replyTo, {
-    parse_mode: "HTML",
-  })
+  sendTextMessage(buildDiscordMessage(message), replyTo)
     .then((telegramMessage) =>
       Promise.all(
         message.attachments.map((attachment) =>
           sendDiscordAttachment(attachment).catch(() =>
             sendTextMessage(
-              `Couldn't send: ${buildLink(
-                attachment.url,
-                attachment.filename
-              )}`,
-              undefined,
-              {
-                parse_mode: "HTML",
-              }
+              `Couldn't send: ${buildLink(attachment.url, attachment.filename)}`
             )
           )
         )
@@ -45,44 +35,14 @@ export const sendDiscordMessage = (message: APIMessage, replyTo?: number) =>
     )
     .then(waitFor(5000));
 
-export const sendMessageThread = (
+export const sendDiscordMessageThread = (
   message: APIMessage
 ): Promise<Message.TextMessage> => {
   if (!message.referenced_message) {
     return sendDiscordMessage(message);
   }
 
-  return sendMessageThread(message.referenced_message).then((telegramMessage) =>
-    sendDiscordMessage(message, telegramMessage.message_id)
+  return sendDiscordMessageThread(message.referenced_message).then(
+    (telegramMessage) => sendDiscordMessage(message, telegramMessage.message_id)
   );
 };
-
-export const sendMessageQueue = (
-  messages: APIMessage[],
-  startMessageLink: string
-) =>
-  messages
-    .reduce<Promise<unknown>>(
-      (acc, message) =>
-        acc
-          .then(() =>
-            sendTextMessage("🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩")
-          )
-          .then(() => sendMessageThread(message)),
-      Promise.resolve()
-    )
-    .then(() => {
-      const lastMessage = messages.pop();
-
-      const lastMessageLink = lastMessage
-        ? `https://discord.com/channels/${VEEFRIENDS_GUILD}/${lastMessage?.channel_id}/${lastMessage?.id}`
-        : startMessageLink;
-
-      const htmlLink = buildLink(lastMessageLink, "Last message");
-
-      return sendTextMessage(
-        `🟥🟥🟥🟥🟥🟥${htmlLink}🟥🟥🟥🟥🟥🟥🟥`,
-        undefined,
-        { parse_mode: "HTML" }
-      ).then(() => ({ lastMessageLink, htmlLink }));
-    });
