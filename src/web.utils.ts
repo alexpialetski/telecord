@@ -1,16 +1,17 @@
 import type { Response } from "express";
 import basicAuth from "express-basic-auth";
 
-export const errorHandler = (res: Response) => (error: any) => {
-  if (error.code === "ENOENT") {
-    return res.status(400).json({ message: "No file with link" });
-  }
-
-  return res.status(500).json({ message: error });
-};
-
 export const authMiddleware = basicAuth({
   users: {
     author: String(process.env.AUTHOR_PASSWORD),
   },
 });
+
+export class CustomError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+  }
+}

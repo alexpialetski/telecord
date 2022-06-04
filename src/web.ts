@@ -4,45 +4,54 @@ import { Telegraf } from "telegraf";
 import bodyParser from "body-parser";
 
 import { searchByLink } from "./main.js";
-import { authMiddleware, errorHandler } from "./web.utils.js";
+import { authMiddleware, CustomError } from "./web.utils.js";
 import { FILE_NAME } from "./constant.js";
+import {
+  requestLoggerMiddleware,
+  errorLoggerMiddleware,
+  logger,
+  promiseLogger,
+} from "./logger.js";
 
 const app = express();
 app.use(bodyParser.json());
+app.use(requestLoggerMiddleware);
 
 app.get("/link", (_, res) =>
   fs
     .readFile(FILE_NAME, { encoding: "utf-8" })
+    .then(promiseLogger("Link"))
     .then((link) => res.status(200).json({ message: link }))
-    .catch(errorHandler(res))
 );
 
-app.post("/link", authMiddleware, (req, res) => {
+app.post("/link", authMiddleware, (req, res, next) => {
   if (!req.body.link) {
-    return res.status(400).json({ message: "No link provided" });
+    throw new CustomError("No link provided", 400);
   }
+
+  logger.info(`Saving link: ${req.body.link}`);
 
   return fs
     .writeFile(FILE_NAME, req.body.link, { encoding: "utf8" })
-    .then(() => res.status(200).send())
-    .catch(errorHandler(res));
+    .then(() => res.status(200).send());
 });
 
 app.post("/trigger", authMiddleware, (_, res) =>
   fs
     .readFile(FILE_NAME, { encoding: "utf-8" })
+    .then(promiseLogger("Link"))
     .then(searchByLink)
+    .then(promiseLogger("Last message link"))
     .then(({ lastMessageLink, htmlLink }) =>
       fs
         .writeFile(FILE_NAME, lastMessageLink, { encoding: "utf8" })
         .then(() => htmlLink)
     )
     .then((link) => res.status(200).json(link))
-    .catch(errorHandler(res))
 );
 
 const server = app.listen(Number(process.env.PORT), "0.0.0.0", () => {
-  console.log(`Web server started: ${JSON.stringify(server.address())}`);
+  logger.info(`Web server started: ${JSON.stringify(server.address())}`);
 });
 
 export const startBot = (bot: Telegraf) => {
@@ -51,3 +60,5 @@ export const startBot = (bot: Telegraf) => {
     res.sendStatus(200);
   });
 };
+
+app.use(errorLoggerMiddleware);

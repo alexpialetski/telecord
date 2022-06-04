@@ -3,13 +3,16 @@ import "dotenv/config";
 import { searchByLink } from "./main.js";
 import { TelegramBot } from "./telegramApi.js";
 import { AUTHOR_TELEGRAM_USER_ID } from "./constant.js";
+import { logger, promiseLogger } from "./logger.js";
 
 TelegramBot.on("text", (ctx) => {
   if (ctx.message.from.id === AUTHOR_TELEGRAM_USER_ID) {
     Promise.resolve(ctx.message.text)
+      .then(promiseLogger("bot: Link"))
       .then(searchByLink)
+      .then(promiseLogger("bot: Last message link"))
       .then(({ htmlLink }) => ctx.reply(htmlLink, { parse_mode: "HTML" }))
-      .catch(console.log);
+      .catch((err) => logger.error({ err }));
   }
 });
 

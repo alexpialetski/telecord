@@ -3,6 +3,7 @@ import * as readline from "readline";
 
 import { ask } from "./readline.js";
 import { searchByLink } from "./main.js";
+import { logger } from "./logger.js";
 
 const rlInterface = readline.createInterface({
   input: process.stdin,
@@ -11,5 +12,5 @@ const rlInterface = readline.createInterface({
 
 ask("What is the link?\n", rlInterface)
   .then(searchByLink)
-  .catch(console.log)
+  .catch((err) => logger.error({ err }))
   .finally(() => rlInterface.close());
