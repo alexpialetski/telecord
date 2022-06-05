@@ -111,3 +111,10 @@ export type SearchMessages = {
   messages: [APIMessage][];
   analytics_id: string;
 };
+
+export type Channel = {
+  id: number;
+  title: string;
+  type: string;
+  description: string;
+};

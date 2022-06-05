@@ -4,10 +4,10 @@ import {
 } from "./discordService.js";
 import { getMessageById } from "./discordApi.js";
 import { buildLink, parseLink } from "./utils.js";
-import { APIMessage } from "./types.js";
-import { sendTextMessage } from "./telegramApi.js";
+import { APIMessage, Channel } from "./types.js";
+import { sendTextMessage, TelegramBot } from "./telegramApi.js";
 import { sendDiscordMessageThread } from "./telegramService.js";
-import { VEEFRIENDS_GUILD } from "./constant.js";
+import { TELEGRAM_CHANNEL_ID, VEEFRIENDS_GUILD } from "./constant.js";
 
 const sendMessageQueue = (messages: APIMessage[], startMessageLink: string) =>
   messages
@@ -53,3 +53,11 @@ export const searchByLink = (link: string) => {
     .then((res) => res.reverse())
     .then((messages: APIMessage[]) => sendMessageQueue(messages, link));
 };
+
+export const getLastMessageLink = (): Promise<string> =>
+  TelegramBot.telegram
+    .getChat(TELEGRAM_CHANNEL_ID)
+    .then((res) => (res as Channel).description);
+
+export const saveLastMessageLink = (link: string): Promise<boolean> =>
+  TelegramBot.telegram.setChatDescription(TELEGRAM_CHANNEL_ID, link);

@@ -1,11 +1,13 @@
-import fs from "fs/promises";
 import express from "express";
 import { Telegraf } from "telegraf";
 import bodyParser from "body-parser";
 
-import { searchByLink } from "./main.js";
+import {
+  getLastMessageLink,
+  saveLastMessageLink,
+  searchByLink,
+} from "./main.js";
 import { authMiddleware, CustomError } from "./web.utils.js";
-import { FILE_NAME } from "./constant.js";
 import {
   requestLoggerMiddleware,
   errorLoggerMiddleware,
@@ -18,8 +20,7 @@ app.use(bodyParser.json());
 app.use(requestLoggerMiddleware);
 
 app.get("/link", (_, res) =>
-  fs
-    .readFile(FILE_NAME, { encoding: "utf-8" })
+  getLastMessageLink()
     .then(promiseLogger("Link"))
     .then((link) => res.status(200).json({ message: link }))
 );
@@ -31,21 +32,16 @@ app.post("/link", authMiddleware, (req, res, next) => {
 
   logger.info(`Saving link: ${req.body.link}`);
 
-  return fs
-    .writeFile(FILE_NAME, req.body.link, { encoding: "utf8" })
-    .then(() => res.status(200).send());
+  return saveLastMessageLink(req.body.link).then(() => res.status(200).send());
 });
 
 app.post("/trigger", authMiddleware, (_, res) =>
-  fs
-    .readFile(FILE_NAME, { encoding: "utf-8" })
+  getLastMessageLink()
     .then(promiseLogger("Link"))
     .then(searchByLink)
     .then(promiseLogger("Last message link"))
     .then(({ lastMessageLink, htmlLink }) =>
-      fs
-        .writeFile(FILE_NAME, lastMessageLink, { encoding: "utf8" })
-        .then(() => htmlLink)
+      saveLastMessageLink(lastMessageLink).then(() => htmlLink)
     )
     .then((link) => res.status(200).json(link))
 );
