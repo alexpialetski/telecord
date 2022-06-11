@@ -19,7 +19,7 @@ TelegramBot.on("text", (ctx) => {
 if (process.env.NODE_ENV === "production") {
   TelegramBot.telegram.setWebhook(
     `${process.env.HEROKU_URL}/${process.env.TELEGRAM_AUTH_TOKEN}}`
-  );
+  ).catch(err => logger.error({ err }));
 }
 
 TelegramBot.launch();
