@@ -36,6 +36,7 @@ export const parseDiscordContent = (content: string): string =>
   content
     .replace(/<#(\d+)>/g, (_, channelId: string) => getChannelName(channelId))
     .replace(/<@(\d+)>/g, (_, personId: string) => getPersonName(personId))
+    .replace(/<@!(\d+)>/g, (_, personId: string) => getPersonName(personId))
     .replace(/<:(\w+):(\d+)>/g, ":$1");
 
 export const buildDiscordMessage = (message: APIMessage): string =>
