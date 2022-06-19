@@ -59,5 +59,9 @@ export const getLastMessageLink = (): Promise<string> =>
     .getChat(TELEGRAM_CHANNEL_ID)
     .then((res) => (res as Channel).description);
 
-export const saveLastMessageLink = (link: string): Promise<boolean> =>
-  TelegramBot.telegram.setChatDescription(TELEGRAM_CHANNEL_ID, link);
+export const saveLastMessageLink = (link: string): Promise<unknown> =>
+  TelegramBot.telegram
+    .setChatDescription(TELEGRAM_CHANNEL_ID, link)
+    .catch(() =>
+      sendTextMessage(`Save link into description manually: ${link}`)
+    );
