@@ -31,7 +31,11 @@ const sendMessageQueue = (messages: APIMessage[], startMessageLink: string) =>
       const htmlLink = buildLink(lastMessageLink, "Last message");
 
       return sendTextMessage(`🟥🟥🟥🟥🟥🟥${htmlLink}🟥🟥🟥🟥🟥🟥🟥`).then(
-        () => ({ lastMessageLink, htmlLink })
+        () => ({
+          lastMessageLink,
+          htmlLink,
+          wasLinkUpdated: Boolean(messages.length),
+        })
       );
     });
 

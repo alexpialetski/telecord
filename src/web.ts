@@ -40,8 +40,11 @@ app.post("/trigger", authMiddleware, (_, res) =>
     .then(promiseLogger("Link"))
     .then(searchByLink)
     .then(promiseLogger("Last message link"))
-    .then(({ lastMessageLink, htmlLink }) =>
-      saveLastMessageLink(lastMessageLink).then(() => htmlLink)
+    .then(({ lastMessageLink, htmlLink, wasLinkUpdated }) =>
+      (wasLinkUpdated
+        ? Promise.resolve()
+        : saveLastMessageLink(lastMessageLink)
+      ).then(() => htmlLink)
     )
     .then((link) => res.status(200).json(link))
 );
