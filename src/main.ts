@@ -34,7 +34,7 @@ const sendMessageQueue = (messages: APIMessage[], startMessageLink: string) =>
         () => ({
           lastMessageLink,
           htmlLink,
-          wasLinkUpdated: Boolean(messages.length),
+          wasLinkUpdated: startMessageLink !== lastMessageLink,
         })
       );
     });
