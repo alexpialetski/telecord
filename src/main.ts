@@ -18,13 +18,15 @@ import { TELEGRAM_CHANNEL_ID, VEEFRIENDS_GUILD } from "./constant.js";
 const sendMessageQueue = (messages: APIMessage[], startMessageLink: string) =>
   messages
     .reduce<Promise<unknown>>(
-      (acc, message) =>
+      (acc, message, index) =>
         acc
-          .then(() =>
-            sendTextMessage("🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩")
-          )
           .then(() => getMessagesWithReferences(message))
-          .then(sendDiscordMessageThread),
+          .then(sendDiscordMessageThread)
+          .then((message) =>
+            index + 1 !== messages.length
+              ? sendTextMessage("🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩")
+              : message
+          ),
       Promise.resolve()
     )
     .then(() => {
