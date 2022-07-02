@@ -1,4 +1,3 @@
-import type { Response } from "express";
 import basicAuth from "express-basic-auth";
 
 export const authMiddleware = basicAuth({

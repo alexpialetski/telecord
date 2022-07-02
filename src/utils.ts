@@ -51,3 +51,6 @@ export const waitFor =
 
 export const buildLink = (url: string, text: string) =>
   `<a href="${url}">${text}</a>`;
+
+export const randomizeGif = (gifs: string[]): string =>
+  gifs[Math.floor(Math.random() * gifs.length)];

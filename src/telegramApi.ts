@@ -16,6 +16,9 @@ export const sendTextMessage = (
     ...options,
   });
 
+export const sendGif = (url: string) =>
+  TelegramBot.telegram.sendAnimation(TELEGRAM_CHANNEL_ID, url);
+
 export const sendVideoMessage = (url: string) =>
   TelegramBot.telegram.sendVideo(TELEGRAM_CHANNEL_ID, url);
 

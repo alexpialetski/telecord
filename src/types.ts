@@ -118,3 +118,10 @@ export type Channel = {
   type: string;
   description: string;
 };
+
+export type SearchFun = (offset: number) => Promise<APIMessage[]>;
+
+export type SearchMeta = {
+  introMessage: string;
+  searchFun: SearchFun;
+};

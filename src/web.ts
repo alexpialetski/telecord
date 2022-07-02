@@ -3,9 +3,10 @@ import { Telegraf } from "telegraf";
 import bodyParser from "body-parser";
 
 import {
-  getLastMessageLink,
-  saveLastMessageLink,
-  searchByLink,
+  getLastMessageLinks,
+  handleLastMessageLinks,
+  postByLinks,
+  saveLastMessageLinks,
 } from "./main.js";
 import { authMiddleware, CustomError } from "./web.utils.js";
 import {
@@ -20,33 +21,28 @@ app.use(bodyParser.json());
 app.use(requestLoggerMiddleware);
 
 app.get("/link", (_, res) =>
-  getLastMessageLink()
+  getLastMessageLinks()
     .then(promiseLogger("Link"))
-    .then((link) => res.status(200).json({ message: link }))
+    .then((links) => res.status(200).json({ message: links }))
 );
 
-app.post("/link", authMiddleware, (req, res, next) => {
-  if (!req.body.link) {
+app.post("/link", authMiddleware, (req, res) => {
+  if (!Object.keys(req.body)) {
     throw new CustomError("No link provided", 400);
   }
 
-  logger.info(`Saving link: ${req.body.link}`);
+  logger.info(`Saving link: ${JSON.stringify(req.body)}`);
 
-  return saveLastMessageLink(req.body.link).then(() => res.status(200).send());
+  return saveLastMessageLinks(req.body).then(() => res.sendStatus(200));
 });
 
 app.post("/trigger", authMiddleware, (_, res) =>
-  getLastMessageLink()
-    .then(promiseLogger("Link"))
-    .then(searchByLink)
+  getLastMessageLinks()
+    .then(promiseLogger("Links"))
+    .then(postByLinks)
     .then(promiseLogger("Last message link"))
-    .then(({ lastMessageLink, htmlLink, wasLinkUpdated }) =>
-      (wasLinkUpdated
-        ? saveLastMessageLink(lastMessageLink)
-        : Promise.resolve()
-      ).then(() => htmlLink)
-    )
-    .then((link) => res.status(200).json(link))
+    .then(handleLastMessageLinks())
+    .then(() => res.sendStatus(200))
 );
 
 const server = app.listen(Number(process.env.PORT), "0.0.0.0", () => {

@@ -1,8 +1,6 @@
 import { ErrorRequestHandler, Request, RequestHandler } from "express";
 import winston from "winston";
 
-import { CustomError } from "./web.utils.js";
-
 export type LogLevel =
   | "error"
   | "warn"

@@ -1,7 +1,11 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 import { APIMessage, SearchMessages } from "./types.js";
-import { GARY_VEE_ID, VEEFRIENDS_GUILD } from "./constant.js";
+import {
+  ANNOUNCEMENTS_CNANNEL_ID,
+  GARY_VEE_ID,
+  VEEFRIENDS_GUILD,
+} from "./constant.js";
 
 const axiosInstance = axios.create({
   headers: {
@@ -28,13 +32,26 @@ type SearchMessagesParams = {
   offset?: number;
   guildId?: string;
   authorId?: string;
-  channel_id?: string;
+  channelId?: string;
 };
+
+export const searchMessagesFromAuthor = ({
+  authorId = GARY_VEE_ID,
+  ...rest
+}: Pick<SearchMessagesParams, "authorId" | "offset">): Promise<APIMessage[]> =>
+  searchMessages({ authorId, ...rest });
+
+export const searchMessagesFromChannel = ({
+  channelId = ANNOUNCEMENTS_CNANNEL_ID,
+  ...rest
+}: Pick<SearchMessagesParams, "channelId" | "offset">): Promise<APIMessage[]> =>
+  searchMessages({ channelId, ...rest });
 
 export const searchMessages = ({
   offset,
   guildId = VEEFRIENDS_GUILD,
-  authorId = GARY_VEE_ID,
+  authorId,
+  channelId,
 }: SearchMessagesParams = {}): Promise<APIMessage[]> =>
   axiosInstance
     .get<SearchMessages>(
@@ -42,6 +59,7 @@ export const searchMessages = ({
       {
         params: {
           author_id: authorId,
+          channel_id: channelId,
           offset,
         },
       }
