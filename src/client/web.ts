@@ -7,14 +7,14 @@ import {
   handleLastMessageLinks,
   postByLinks,
   saveLastMessageLinks,
-} from "./main.js";
-import { authMiddleware, CustomError } from "./web.utils.js";
+} from "../main.js";
+import { authMiddleware, CustomError } from "../utils/web.utils.js";
 import {
   requestLoggerMiddleware,
   errorLoggerMiddleware,
   logger,
   promiseLogger,
-} from "./logger.js";
+} from "../utils/logger.js";
 
 const app = express();
 app.use(bodyParser.json());

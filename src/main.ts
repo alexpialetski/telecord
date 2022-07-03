@@ -2,17 +2,17 @@ import {
   searchMessagesAfterTimestamp,
   getMessagesWithReferences,
   getMetaForLinks,
-} from "./discordService.js";
-import { getMessageById } from "./discordApi.js";
-import { parseLink } from "./utils.js";
+} from "./discord/discordService.js";
+import { getMessageById } from "./discord/discordApi.js";
+import { parseLink } from "./utils/utils.js";
 import { APIMessage, Channel, SearchFun } from "./types.js";
-import { sendTextMessage, TelegramBot } from "./telegramApi.js";
+import { sendTextMessage, TelegramBot } from "./telegram/telegramApi.js";
 import {
   sendDiscordMessageThread,
   sendErrorMessage,
   sendHappyGif,
   sendSadGif,
-} from "./telegramService.js";
+} from "./telegram/telegramService.js";
 import { TELEGRAM_CHANNEL_ID, VEEFRIENDS_GUILD } from "./constant.js";
 
 const sendMessageQueue = (messages: APIMessage[], startMessageLink: string) =>

@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import { TelegramBot } from "./bot.js";
-import { startBot } from "./web.js";
+import { TelegramBot } from "./client/bot.js";
+import { startBot } from "./client/web.js";
 
 startBot(TelegramBot);

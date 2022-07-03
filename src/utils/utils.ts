@@ -3,8 +3,8 @@ import {
   GARY_VEE_ID,
   GENERAL_CHANNEL_ID,
   VEEFRIENDS_GUILD,
-} from "./constant.js";
-import { APIMessage } from "./types.js";
+} from "../constant.js";
+import { APIMessage } from "../types.js";
 
 export const parseLink = (link: string) => {
   const splittedLink = link.split("/").reverse();

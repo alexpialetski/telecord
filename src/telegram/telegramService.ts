@@ -1,4 +1,4 @@
-import { NEW_MESSAGES_GIFS, NO_MESSAGES_GIFS } from "./constant.js";
+import { NEW_MESSAGES_GIFS, NO_MESSAGES_GIFS } from "../constant.js";
 import { Message } from "telegraf/typings/core/types/typegram";
 
 import {
@@ -7,13 +7,13 @@ import {
   sendTextMessage,
   sendVideoMessage,
 } from "./telegramApi.js";
-import { APIAttachment, APIMessage } from "./types.js";
+import { APIAttachment, APIMessage } from "../types.js";
 import {
   buildDiscordMessage,
   buildLink,
   randomizeGif,
   waitFor,
-} from "./utils.js";
+} from "../utils/utils.js";
 
 export const sendDiscordAttachment = (attachment: APIAttachment) => {
   if (attachment.content_type === "image/jpeg") {

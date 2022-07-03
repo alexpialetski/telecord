@@ -1,9 +1,9 @@
 import "dotenv/config";
 import * as readline from "readline";
 
-import { ask } from "./readline.js";
-import { handleLastMessageLinks, postByLinks } from "./main.js";
-import { logger, promiseLogger } from "./logger.js";
+import { ask } from "../utils/readline.js";
+import { handleLastMessageLinks, postByLinks } from "../main.js";
+import { logger, promiseLogger } from "../utils/logger.js";
 
 const rlInterface = readline.createInterface({
   input: process.stdin,

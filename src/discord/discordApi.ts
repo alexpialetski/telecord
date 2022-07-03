@@ -1,11 +1,11 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
-import { APIMessage, SearchMessages } from "./types.js";
+import { APIMessage, SearchMessages } from "../types.js";
 import {
   ANNOUNCEMENTS_CNANNEL_ID,
   GARY_VEE_ID,
   VEEFRIENDS_GUILD,
-} from "./constant.js";
+} from "../constant.js";
 
 const axiosInstance = axios.create({
   headers: {

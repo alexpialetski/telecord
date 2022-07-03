@@ -1,4 +1,4 @@
-import { APIMessage, MessageType, SearchFun, SearchMeta } from "./types.js";
+import { APIMessage, MessageType, SearchFun, SearchMeta } from "../types.js";
 import {
   getMessageById,
   searchMessagesFromAuthor,

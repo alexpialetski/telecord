@@ -1,7 +1,7 @@
 import { Telegraf } from "telegraf";
 import { ExtraReplyMessage } from "telegraf/typings/telegram-types";
 
-import { TELEGRAM_CHANNEL_ID } from "./constant.js";
+import { TELEGRAM_CHANNEL_ID } from "../constant.js";
 
 export const TelegramBot = new Telegraf(process.env.TELEGRAM_AUTH_TOKEN || "");
 

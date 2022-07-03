@@ -1,9 +1,9 @@
 import "dotenv/config";
 
-import { handleLastMessageLinks, postByLinks } from "./main.js";
-import { TelegramBot } from "./telegramApi.js";
-import { AUTHOR_TELEGRAM_USER_ID } from "./constant.js";
-import { logger, promiseLogger } from "./logger.js";
+import { handleLastMessageLinks, postByLinks } from "../main.js";
+import { TelegramBot } from "../telegram/telegramApi.js";
+import { AUTHOR_TELEGRAM_USER_ID } from "../constant.js";
+import { logger, promiseLogger } from "../utils/logger.js";
 
 TelegramBot.on("text", (ctx) => {
   if (ctx.message.from.id === AUTHOR_TELEGRAM_USER_ID) {

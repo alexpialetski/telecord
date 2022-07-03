@@ -6,9 +6,8 @@
   "main": "./src/index.ts",
   "scripts": {
     "start": "node ./build/index.js",
-    "cli": "ts-node ./src/cli.ts",
+    "cli": "ts-node ./src/client/cli.ts",
     "web": "ts-node ./src/index.ts",
-    "test": "ts-node ./src/test.ts",
     "dev": "nodemon ./src/index.ts",
     "build": "tsc"
   },
