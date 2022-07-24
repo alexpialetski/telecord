@@ -6,7 +6,7 @@ import {
 import { getMessageById } from "./discord/discordApi.js";
 import { parseLink } from "./utils/utils.js";
 import { APIMessage, Channel, SearchFun } from "./types.js";
-import { sendTextMessage, TelegramBot } from "./telegram/telegramApi.js";
+import { telagramAPI, TelegramBot } from "./telegram/telegramApi.js";
 import {
   sendDiscordMessageThread,
   sendErrorMessage,
@@ -22,10 +22,12 @@ const sendMessageQueue = (messages: APIMessage[], startMessageLink: string) =>
         acc
           .then(() => getMessagesWithReferences(message))
           .then(sendDiscordMessageThread)
-          .then((message) =>
+          .then((lastMessage) =>
             index + 1 !== messages.length
-              ? sendTextMessage("🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩")
-              : message
+              ? telagramAPI.sendTextMessage(
+                  "🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩🟩"
+                )
+              : lastMessage
           ),
       Promise.resolve()
     )
@@ -84,9 +86,8 @@ export const postByLinks = (
               ]);
             }
 
-            return sendTextMessage(
-              `🟨🟨🟨🟨🟨🟨${meta.introMessage}🟨🟨🟨🟨🟨🟨`
-            )
+            return telagramAPI
+              .sendTextMessage(`🟨🟨🟨🟨🟨🟨${meta.introMessage}🟨🟨🟨🟨🟨🟨`)
               .then(() => sendMessageQueue(messages, meta.link))
               .then((result) => [
                 ...arrWithLinks,

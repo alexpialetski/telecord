@@ -1,46 +1,40 @@
 import { NEW_MESSAGES_GIFS, NO_MESSAGES_GIFS } from "../constant.js";
 import { Message } from "telegraf/typings/core/types/typegram";
 
-import {
-  sendGif,
-  sendPhotoMessage,
-  sendTextMessage,
-  sendVideoMessage,
-} from "./telegramApi.js";
+import { telagramAPI } from "./telegramApi.js";
 import { APIAttachment, APIMessage } from "../types.js";
 import {
   buildDiscordMessage,
   buildLink,
   randomizeGif,
-  waitFor,
 } from "../utils/utils.js";
 
 export const sendDiscordAttachment = (attachment: APIAttachment) => {
   if (attachment.content_type === "image/jpeg") {
-    return sendPhotoMessage(attachment.url);
+    return telagramAPI.sendPhotoMessage(attachment.url);
   }
 
   if (attachment.content_type === "video/quicktime") {
-    return sendVideoMessage(attachment.url);
+    return telagramAPI.sendVideoMessage(attachment.url);
   }
 
-  return sendTextMessage(attachment.url);
+  return telagramAPI.sendTextMessage(attachment.url);
 };
 
 export const sendDiscordMessage = (message: APIMessage, replyTo?: number) =>
-  sendTextMessage(buildDiscordMessage(message), replyTo)
+  telagramAPI
+    .sendTextMessage(buildDiscordMessage(message), replyTo)
     .then((telegramMessage) =>
       Promise.all(
         message.attachments.map((attachment) =>
           sendDiscordAttachment(attachment).catch(() =>
-            sendTextMessage(
+            telagramAPI.sendTextMessage(
               `Couldn't send: ${buildLink(attachment.url, attachment.filename)}`
             )
           )
         )
       ).then(() => telegramMessage)
-    )
-    .then(waitFor(5000));
+    );
 
 export const sendDiscordMessageThread = (
   message: APIMessage
@@ -55,8 +49,10 @@ export const sendDiscordMessageThread = (
 };
 
 export const sendErrorMessage = (errorMessage: string) =>
-  sendTextMessage(`❗Error: ${errorMessage}`);
+  telagramAPI.sendTextMessage(`❗Error: ${errorMessage}`);
 
-export const sendSadGif = () => sendGif(randomizeGif(NO_MESSAGES_GIFS));
+export const sendSadGif = () =>
+  telagramAPI.sendGif(randomizeGif(NO_MESSAGES_GIFS));
 
-export const sendHappyGif = () => sendGif(randomizeGif(NEW_MESSAGES_GIFS));
+export const sendHappyGif = () =>
+  telagramAPI.sendGif(randomizeGif(NEW_MESSAGES_GIFS));
