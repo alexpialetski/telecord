@@ -44,7 +44,7 @@ app.post("/trigger", authMiddleware, (_, res) =>
     .then(promiseLogger("Last message link"))
     .then(handleLastMessageLinks())
     .then(() => res.sendStatus(200))
-    .catch((err) => sendErrorMessage(JSON.stringify(err)))
+    .catch((err: Error) => sendErrorMessage(err.message))
 );
 
 const server = app.listen(Number(process.env.PORT), "0.0.0.0", () => {
