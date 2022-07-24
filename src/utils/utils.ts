@@ -62,5 +62,5 @@ export const stringifyTimestamp = (timestamp: string): string =>
     year: "numeric",
     month: "short",
     day: "numeric",
-    timeZone: "Belarus/Minsk",
+    timeZone: "Europe/Minsk",
   });
