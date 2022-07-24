@@ -40,9 +40,10 @@ export const parseDiscordContent = (content: string): string =>
     .replace(/<:(\w+):(\d+)>/g, ":$1");
 
 export const buildDiscordMessage = (message: APIMessage): string =>
-  `<b><u>${message.author.username}</u> - ${getChannelName(
-    message.channel_id
-  )}</b>\n` + parseDiscordContent(message.content);
+  `<b><u>${message.author.username}</u> - ${stringifyTimestamp(
+    message.timestamp
+  )} - ${getChannelName(message.channel_id)}</b>\n` +
+  parseDiscordContent(message.content);
 
 export const waitFor =
   <T>(timeout: number) =>
@@ -52,5 +53,14 @@ export const waitFor =
 export const buildLink = (url: string, text: string) =>
   `<a href="${url}">${text}</a>`;
 
-export const randomizeGif = (gifs: string[]): string =>
+export const randomizeItem = (gifs: string[]): string =>
   gifs[Math.floor(Math.random() * gifs.length)];
+
+export const stringifyTimestamp = (timestamp: string): string =>
+  new Date(timestamp).toLocaleString("en-US", {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "Belarus/Minsk",
+  });

@@ -6,7 +6,7 @@ import { APIAttachment, APIMessage } from "../types.js";
 import {
   buildDiscordMessage,
   buildLink,
-  randomizeGif,
+  randomizeItem,
 } from "../utils/utils.js";
 
 export const sendDiscordAttachment = (attachment: APIAttachment) => {
@@ -52,7 +52,7 @@ export const sendErrorMessage = (errorMessage: string) =>
   telagramAPI.sendTextMessage(`❗Error: ${errorMessage}`);
 
 export const sendSadGif = () =>
-  telagramAPI.sendGif(randomizeGif(NO_MESSAGES_GIFS));
+  telagramAPI.sendGif(randomizeItem(NO_MESSAGES_GIFS));
 
 export const sendHappyGif = () =>
-  telagramAPI.sendGif(randomizeGif(NEW_MESSAGES_GIFS));
+  telagramAPI.sendGif(randomizeItem(NEW_MESSAGES_GIFS));

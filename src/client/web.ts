@@ -15,6 +15,7 @@ import {
   logger,
   promiseLogger,
 } from "../utils/logger.js";
+import { sendErrorMessage } from "../telegram/telegramService.js";
 
 const app = express();
 app.use(bodyParser.json());
@@ -43,6 +44,7 @@ app.post("/trigger", authMiddleware, (_, res) =>
     .then(promiseLogger("Last message link"))
     .then(handleLastMessageLinks())
     .then(() => res.sendStatus(200))
+    .catch((err) => sendErrorMessage(JSON.stringify(err)))
 );
 
 const server = app.listen(Number(process.env.PORT), "0.0.0.0", () => {
