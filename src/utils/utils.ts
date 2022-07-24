@@ -59,8 +59,8 @@ export const randomizeItem = (gifs: string[]): string =>
 export const stringifyTimestamp = (timestamp: string): string =>
   new Date(timestamp).toLocaleString("en-US", {
     weekday: "short",
-    year: "numeric",
     month: "short",
     day: "numeric",
+    hour: "numeric",
     timeZone: "Europe/Minsk",
   });
