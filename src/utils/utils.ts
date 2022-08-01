@@ -32,11 +32,20 @@ export const getPersonName = (personId: string): string => {
   return `@${personId}`;
 };
 
+export const getEmoji = (emojiId: string): string => {
+  if (emojiId.includes(":alert:")) {
+    return "&#128680";
+  }
+
+  return emojiId;
+};
+
 export const parseDiscordContent = (content: string): string =>
   content
     .replace(/<#(\d+)>/g, (_, channelId: string) => getChannelName(channelId))
     .replace(/<@(\d+)>/g, (_, personId: string) => getPersonName(personId))
     .replace(/<@!(\d+)>/g, (_, personId: string) => getPersonName(personId))
+    .replace(/<a:(\w+):(\d+)>/g, (_, emojiId: string) => getEmoji(emojiId))
     .replace(/<:(\w+):(\d+)>/g, ":$1");
 
 export const buildDiscordMessage = (message: APIMessage): string =>
