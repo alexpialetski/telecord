@@ -33,7 +33,7 @@ export const getPersonName = (personId: string): string => {
 };
 
 export const getEmoji = (emojiId: string): string => {
-  if (emojiId.includes(":alert:")) {
+  if (emojiId === "alert") {
     return "&#128680";
   }
 
