@@ -32,6 +32,14 @@ export const getPersonName = (personId: string): string => {
   return `@${personId}`;
 };
 
+export const getRole = (roleId: string): string => {
+  if (roleId === "883825823277277234") {
+    return "NFL";
+  }
+
+  return `@&${roleId}`;
+};
+
 export const getEmoji = (emojiId: string): string => {
   if (emojiId === "alert") {
     return "&#128680";
@@ -45,6 +53,7 @@ export const parseDiscordContent = (content: string): string =>
     .replace(/<#(\d+)>/g, (_, channelId: string) => getChannelName(channelId))
     .replace(/<@(\d+)>/g, (_, personId: string) => getPersonName(personId))
     .replace(/<@!(\d+)>/g, (_, personId: string) => getPersonName(personId))
+    .replace(/<@&(\d+)>/g, (_, roleId: string) => getRole(roleId))
     .replace(/<a:(\w+):(\d+)>/g, (_, emojiId: string) => getEmoji(emojiId))
     .replace(/<:(\w+):(\d+)>/g, ":$1");
 
