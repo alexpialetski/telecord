@@ -13,15 +13,18 @@ export const parseLink = (link: string) => {
 };
 
 export const getChannelName = (channelId: string): string => {
-  if (channelId === GENERAL_CHANNEL_ID) {
-    return "#general";
+  switch (channelId) {
+    case GENERAL_CHANNEL_ID:
+      return "#general";
+    case ANNOUNCEMENTS_CNANNEL_ID:
+      return "#announcements";
+    case "1006973530962935828":
+      return "#how-to-play";
+    case "#1006976283252625439":
+      return "#giveaways";
+    default:
+      return `<a href="https://discord.com/channels/${VEEFRIENDS_GUILD}/${channelId}">#${channelId}</a>`;
   }
-
-  if (channelId === ANNOUNCEMENTS_CNANNEL_ID) {
-    return "#announcements";
-  }
-
-  return `<a href="https://discord.com/channels/${VEEFRIENDS_GUILD}/${channelId}">#${channelId}</a>`;
 };
 
 export const getPersonName = (personId: string): string => {
@@ -48,14 +51,22 @@ export const getEmoji = (emojiId: string): string => {
   return emojiId;
 };
 
+export const transformMarkdownToHTML = (content: string): string => {
+  return content
+    .replace(/\*\*(.*)\*\*/g, "<b>$1</b>")
+    .replace(/__(.*)__/g, "<u>$1</u>");
+};
+
 export const parseDiscordContent = (content: string): string =>
-  content
-    .replace(/<#(\d+)>/g, (_, channelId: string) => getChannelName(channelId))
-    .replace(/<@(\d+)>/g, (_, personId: string) => getPersonName(personId))
-    .replace(/<@!(\d+)>/g, (_, personId: string) => getPersonName(personId))
-    .replace(/<@&(\d+)>/g, (_, roleId: string) => getRole(roleId))
-    .replace(/<a:(\w+):(\d+)>/g, (_, emojiId: string) => getEmoji(emojiId))
-    .replace(/<:(\w+):(\d+)>/g, ":$1");
+  transformMarkdownToHTML(
+    content
+      .replace(/<#(\d+)>/g, (_, channelId: string) => getChannelName(channelId))
+      .replace(/<@(\d+)>/g, (_, personId: string) => getPersonName(personId))
+      .replace(/<@!(\d+)>/g, (_, personId: string) => getPersonName(personId))
+      .replace(/<@&(\d+)>/g, (_, roleId: string) => getRole(roleId))
+      .replace(/<a:(\w+):(\d+)>/g, (_, emojiId: string) => getEmoji(emojiId))
+      .replace(/<:(\w+):(\d+)>/g, ":$1")
+  );
 
 export const buildDiscordMessage = (message: APIMessage): string =>
   `<b><u>${message.author.username}</u> - ${stringifyTimestamp(
