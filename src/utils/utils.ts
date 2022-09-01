@@ -20,7 +20,7 @@ export const getChannelName = (channelId: string): string => {
       return "#announcements";
     case "1006973530962935828":
       return "#how-to-play";
-    case "#1006976283252625439":
+    case "1006976283252625439":
       return "#giveaways";
     default:
       return `<a href="https://discord.com/channels/${VEEFRIENDS_GUILD}/${channelId}">#${channelId}</a>`;
@@ -54,6 +54,7 @@ export const getEmoji = (emojiId: string): string => {
 export const transformMarkdownToHTML = (content: string): string => {
   return content
     .replace(/\*\*(.*)\*\*/g, "<b>$1</b>")
+    .replace(/\*(.*)\*/g, "<i>$1</i>")
     .replace(/__(.*)__/g, "<u>$1</u>");
 };
 
