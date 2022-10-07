@@ -8,6 +8,7 @@ import {
   buildLink,
   randomizeItem,
 } from "../utils/utils.js";
+import { buildDiscordMessageLink } from "../utils/discord.utils.js";
 
 export const sendDiscordAttachment = (attachment: APIAttachment) => {
   if (attachment.content_type === "image/jpeg") {
@@ -34,6 +35,13 @@ export const sendDiscordMessage = (message: APIMessage, replyTo?: number) =>
           )
         )
       ).then(() => telegramMessage)
+    )
+    .catch((err: Error) =>
+      sendErrorMessage(
+        err.message +
+          "<br>" +
+          buildLink(buildDiscordMessageLink(message), "discord link")
+      )
     );
 
 export const sendDiscordMessageThread = (
