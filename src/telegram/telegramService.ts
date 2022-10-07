@@ -38,9 +38,10 @@ export const sendDiscordMessage = (message: APIMessage, replyTo?: number) =>
     )
     .catch((err: Error) =>
       sendErrorMessage(
-        err.message +
-          "<br>" +
-          buildLink(buildDiscordMessageLink(message), "discord link")
+        `${err.message}\n\n<b>${buildLink(
+          buildDiscordMessageLink(message),
+          "discord link"
+        )}</b>`
       )
     );
 

@@ -1,4 +1,5 @@
-import { APIMessage } from "types";
+import { VEEFRIENDS_GUILD } from "../constant.js";
+import { APIMessage } from "../types.js";
 
 export const buildDiscordMessageLink = (message: APIMessage) =>
-  `https://discord.com/channels/${message.guild_id}/${message.channel_id}/${message.id}`;
+  `https://discord.com/channels/${VEEFRIENDS_GUILD}/${message.channel_id}/${message.id}`;
